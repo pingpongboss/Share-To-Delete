@@ -3,5 +3,6 @@
 
     <string name="hello">Hello World, ShareToDeleteActivity!</string>
     <string name="app_name">Share To Delete</string>
+    <string name="share_name">Delete</string>
 
 </resources>
