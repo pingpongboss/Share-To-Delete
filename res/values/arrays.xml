@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="alert_names">
+        <item>Pop-up alert</item>
+        <item>Status bar notification</item>
+        <item>None</item>
+    </string-array>
+    <string-array name="alert_values">
+        <item>popup</item>
+        <item>notification</item>
+        <item>none</item>
+    </string-array>
+
+</resources>

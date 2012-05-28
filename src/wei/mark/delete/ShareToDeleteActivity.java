@@ -25,9 +25,15 @@ public class ShareToDeleteActivity extends Activity {
 			if (extras.containsKey(Intent.EXTRA_STREAM)) {
 				try {
 					Uri uri = (Uri) extras.getParcelable(Intent.EXTRA_STREAM);
+					boolean prompt = extras.getBoolean("prompt");
 					final String path = getPath(uri);
 
-					Utils.delete(this, path, uri, new DeleteCallback() {
+					if (path == null) {
+						Utils.fail("Image does not exist.");
+						finish();
+					}
+
+					Utils.delete(this, path, uri, prompt, new DeleteCallback() {
 
 						@Override
 						public void done(boolean success) {
@@ -57,7 +63,9 @@ public class ShareToDeleteActivity extends Activity {
 		int column_index = cursor
 				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 
-		cursor.moveToFirst();
-		return cursor.getString(column_index);
+		if (cursor.moveToFirst()) {
+			return cursor.getString(column_index);
+		}
+		return null;
 	}
 }

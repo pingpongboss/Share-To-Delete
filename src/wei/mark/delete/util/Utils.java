@@ -47,10 +47,12 @@ public class Utils {
 	}
 
 	public static void delete(final ShareToDeleteActivity context,
-			final String path, final Uri uri, final DeleteCallback callback) {
+			final String path, final Uri uri, boolean prompt,
+			final DeleteCallback callback) {
 
-		boolean prompt = PreferenceManager.getDefaultSharedPreferences(context)
-				.getBoolean("prompt", false);
+		prompt = prompt
+				|| PreferenceManager.getDefaultSharedPreferences(context)
+						.getBoolean("prompt", false);
 		if (prompt) {
 
 			ImageView image = new ImageView(context);
