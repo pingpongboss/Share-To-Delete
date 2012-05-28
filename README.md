@@ -4,9 +4,16 @@ Install **Share to Delete**
 * From Google Play: Coming soon...
 * Manual download: https://github.com/pingpongboss/Share-To-Delete/downloads
 
-**Share to Delete** appears when you Share a picture from the Camera
+**Share to Delete** appears when you Share a picture from the Camera.
 
 ![Share to Delete](https://github.com/pingpongboss/Share-To-Delete/raw/master/web/images/share%20to%20delete.png)
+
+Click to delete the picture.
+
+# Turbo Mode
+New in Version 1.2: Delete the picture you just took with one click.
+
+![Turbo Mode](https://github.com/pingpongboss/Share-To-Delete/raw/master/web/images/turbo%20mode.png)
 
 # That was easy! How was it before?
 
