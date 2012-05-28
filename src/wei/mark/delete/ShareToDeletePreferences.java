@@ -35,6 +35,8 @@ public class ShareToDeletePreferences extends PreferenceActivity {
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
+
+		startService(new Intent(this, ContentObserverService.class));
 	}
 
 }
