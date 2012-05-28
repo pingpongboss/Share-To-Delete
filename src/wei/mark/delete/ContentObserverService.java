@@ -3,12 +3,16 @@ package wei.mark.delete;
 import wei.mark.delete.util.Utils;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.util.Log;
 
 public class ContentObserverService extends Service {
 
@@ -21,6 +25,16 @@ public class ContentObserverService extends Service {
 	public void onCreate() {
 		super.onCreate();
 
+		// save count. Only react to added images
+		PreferenceManager
+				.getDefaultSharedPreferences(ContentObserverService.this)
+				.edit()
+				.putInt("count",
+						getContentResolver().query(
+								MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+								null, null, null, "date_added DESC").getCount())
+				.commit();
+
 		getContentResolver().registerContentObserver(
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true,
 				new ContentObserver(null) {
@@ -31,6 +45,7 @@ public class ContentObserverService extends Service {
 						Cursor cursor = getContentResolver().query(
 								MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
 								null, null, null, "date_added DESC");
+						int count = cursor.getCount();
 
 						int pathColumnIndex = cursor
 								.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
@@ -41,8 +56,32 @@ public class ContentObserverService extends Service {
 						String path = cursor.getString(pathColumnIndex);
 						int id = cursor.getInt(idColumnIndex);
 
+						SharedPreferences prefs = PreferenceManager
+								.getDefaultSharedPreferences(ContentObserverService.this);
+						int prevCount = prefs.getInt("count", 0);
+						prefs.edit().putInt("count", count).commit();
+
+						Log.d("ContentObserverService", "Image count from "
+								+ prevCount + " to " + count);
+
+						// don't do anything if no images were added
+						if (prevCount >= count) {
+							return;
+						}
+
 						Bitmap bitmap = Utils.createThumbnail(
 								BitmapFactory.decodeFile(path), 48, 48);
+						Uri uri = Uri.withAppendedPath(
+								MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+								Integer.toString(id));
+
+						// tmp
+						Intent deleteIntent = new Intent(Intent.ACTION_SEND)
+								.setClass(ContentObserverService.this,
+										ShareToDeleteActivity.class)
+								.putExtra(Intent.EXTRA_STREAM, uri)
+								.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						startActivity(deleteIntent);
 					}
 				});
 	}

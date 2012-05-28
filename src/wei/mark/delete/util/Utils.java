@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import wei.mark.delete.ShareToDeleteActivity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -45,8 +46,8 @@ public class Utils {
 		}
 	}
 
-	public static void delete(final Context context, final String path,
-			final Uri uri, final DeleteCallback callback) {
+	public static void delete(final ShareToDeleteActivity context,
+			final String path, final Uri uri, final DeleteCallback callback) {
 
 		boolean prompt = PreferenceManager.getDefaultSharedPreferences(context)
 				.getBoolean("prompt", false);
@@ -65,7 +66,7 @@ public class Utils {
 			}
 
 			AlertDialog.Builder alert = new AlertDialog.Builder(context);
-			alert.setTitle("Do you want to delete this file?")
+			alert.setTitle("What do you want to do?")
 					.setMessage(path)
 					.setPositiveButton("Delete", new OnClickListener() {
 
@@ -75,7 +76,7 @@ public class Utils {
 									uri, getId(context, uri)));
 							return;
 						}
-					}).setNegativeButton("Cancel", new OnClickListener() {
+					}).setNegativeButton("Keep", new OnClickListener() {
 
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -92,8 +93,8 @@ public class Utils {
 		}
 	}
 
-	private static boolean deleteWithoutPrompt(Context context, String path,
-			Uri uri, int mediaId) {
+	private static boolean deleteWithoutPrompt(ShareToDeleteActivity context,
+			String path, Uri uri, int mediaId) {
 		File file = new File(path);
 		if (file.canWrite()) {
 			if (file.delete()) {
