@@ -4,10 +4,9 @@ import wei.mark.delete.util.Utils;
 import wei.mark.delete.util.Utils.DeleteCallback;
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.widget.Toast;
 
 public class ShareToDeleteActivity extends Activity {
 	/** Called when the activity is first created. */
@@ -25,19 +24,15 @@ public class ShareToDeleteActivity extends Activity {
 			if (extras.containsKey(Intent.EXTRA_STREAM)) {
 				try {
 					Uri uri = (Uri) extras.getParcelable(Intent.EXTRA_STREAM);
-					boolean prompt = extras.getBoolean("prompt");
-					final String path = getPath(uri);
 
-					if (path == null) {
-						Utils.fail("Image does not exist.");
-						finish();
-					}
-
-					Utils.delete(this, path, uri, prompt, new DeleteCallback() {
+					Utils.delete(this, uri, new DeleteCallback() {
 
 						@Override
 						public void done(boolean success) {
 							finish();
+							Toast.makeText(ShareToDeleteActivity.this,
+									"Deleted successfully.", Toast.LENGTH_SHORT)
+									.show();
 						}
 					});
 				} catch (Exception e) {
@@ -50,22 +45,7 @@ public class ShareToDeleteActivity extends Activity {
 				finish();
 			}
 		} else {
-			// started from the launcher
-			startActivity(new Intent(this, ShareToDeletePreferences.class));
 			finish();
 		}
-	}
-
-	// http://stackoverflow.com/questions/5548645/get-thumbnail-uri-path-of-the-image-stored-in-sd-card-android
-	public String getPath(Uri uri) {
-		String[] projection = { MediaStore.Images.Media.DATA };
-		Cursor cursor = managedQuery(uri, projection, null, null, null);
-		int column_index = cursor
-				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-
-		if (cursor.moveToFirst()) {
-			return cursor.getString(column_index);
-		}
-		return null;
 	}
 }

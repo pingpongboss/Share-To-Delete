@@ -2,12 +2,12 @@
 <resources>
 
     <string-array name="alert_names">
-        <item>Pop-up alert</item>
-        <item>Status bar notification</item>
-        <item>None</item>
+        <item>Camera Overlay (Recommended)</item>
+        <item>Status Bar Notification</item>
+        <item>Disable Turbo Mode</item>
     </string-array>
     <string-array name="alert_values">
-        <item>popup</item>
+        <item>overlay</item>
         <item>notification</item>
         <item>none</item>
     </string-array>
