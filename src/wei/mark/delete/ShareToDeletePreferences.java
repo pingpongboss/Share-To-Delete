@@ -36,6 +36,6 @@ public class ShareToDeletePreferences extends PreferenceActivity {
 			e.printStackTrace();
 		}
 
-		startService(new Intent(this, ContentObserverService.class));
+		startService(new Intent(this, ShareToDeleteService.class));
 	}
 }

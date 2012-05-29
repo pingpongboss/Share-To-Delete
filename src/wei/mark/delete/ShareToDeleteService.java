@@ -32,7 +32,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class ContentObserverService extends Service {
+public class ShareToDeleteService extends Service {
 	private static final int DELETE_NOTIFICATION_ID = 1;
 
 	private static final int SHOW_POPUP_ID = 1;
@@ -87,7 +87,7 @@ public class ContentObserverService extends Service {
 							int id = cursor.getInt(idColumnIndex);
 
 							SharedPreferences prefs = PreferenceManager
-									.getDefaultSharedPreferences(ContentObserverService.this);
+									.getDefaultSharedPreferences(ShareToDeleteService.this);
 							int prevCount = prefs.getInt("count", 0);
 							prefs.edit().putInt("count", count).commit();
 
@@ -126,7 +126,7 @@ public class ContentObserverService extends Service {
 								Intent notificationIntent = getDeleteIntent(uri);
 								PendingIntent contentIntent = PendingIntent
 										.getService(
-												ContentObserverService.this, 0,
+												ShareToDeleteService.this, 0,
 												notificationIntent,
 												// flag updates any existing
 												// notification
@@ -171,7 +171,7 @@ public class ContentObserverService extends Service {
 
 		// save count. Only react to added images
 		PreferenceManager
-				.getDefaultSharedPreferences(ContentObserverService.this)
+				.getDefaultSharedPreferences(ShareToDeleteService.this)
 				.edit()
 				.putInt("count",
 						getContentResolver().query(
@@ -183,18 +183,18 @@ public class ContentObserverService extends Service {
 	}
 
 	private Intent getDeleteIntent(Uri uri) {
-		return new Intent(this, ContentObserverService.class).putExtra(
+		return new Intent(this, ShareToDeleteService.class).putExtra(
 				Intent.EXTRA_STREAM, uri).putExtra("action", "delete");
 	}
 
 	private void createViews() {
 		int margins = 4;
 
-		ImageView image = new ImageView(ContentObserverService.this);
+		ImageView image = new ImageView(ShareToDeleteService.this);
 		image.setImageResource(android.R.drawable.ic_menu_delete);
 		image.setBackgroundColor(Color.argb((int) (255 / 1.5), 0, 0, 0));
 
-		mView = new FrameLayout(ContentObserverService.this) {
+		mView = new FrameLayout(ShareToDeleteService.this) {
 			@Override
 			public boolean onTouchEvent(MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -280,18 +280,18 @@ public class ContentObserverService extends Service {
 				@Override
 				public void done(boolean success) {
 					if (success) {
-						Toast.makeText(ContentObserverService.this,
+						Toast.makeText(ShareToDeleteService.this,
 								"Deleted successfully.", Toast.LENGTH_SHORT)
 								.show();
 					}
 
 					boolean refresh = PreferenceManager
 							.getDefaultSharedPreferences(
-									ContentObserverService.this).getBoolean(
+									ShareToDeleteService.this).getBoolean(
 									"refresh", false);
 					if (refresh) {
 						// workaround for Camera app that doesn't auto refresh
-						startActivity(new Intent(ContentObserverService.this,
+						startActivity(new Intent(ShareToDeleteService.this,
 								ShareToDeleteActivity.class)
 								.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 					}

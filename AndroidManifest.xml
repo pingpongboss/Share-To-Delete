@@ -46,7 +46,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".ContentObserverService" >
+        <service android:name=".ShareToDeleteService" >
         </service>
     </application>
 

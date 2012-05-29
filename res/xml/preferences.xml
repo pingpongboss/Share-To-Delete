@@ -2,13 +2,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory android:title="Preferences" >
-        <ListPreference android:dialogTitle="Choose alert type" android:entries="@array/alert_names" android:entryValues="@array/alert_values" android:key="alert" android:summary="Delete the picture you just took with one click" android:title="Turbo Mode" android:defaultValue="overlay" /><CheckBoxPreference
+        <ListPreference android:dialogTitle="Choose Turbo Mode Type" android:entries="@array/alert_names" android:entryValues="@array/alert_values" android:key="alert" android:summary="Delete the picture you just took with one click" android:title="Turbo Mode Configuration" android:defaultValue="overlay"/><CheckBoxPreference
             android:defaultValue="false"
             android:key="prompt"
-            android:title="Display Delete Confirmation" android:summary="Much slower!"/>
+            android:title="Display Delete Confirmation" android:summary="Caution: Makes the app much slower!"/>
 
         
-        <CheckBoxPreference android:key="refresh" android:title="Camera Refresh Fix" android:summary="Enable this workaround if your Camera app does not detect the picture being deleted"/>
+        <CheckBoxPreference android:key="refresh" android:title="Camera Refresh Fix" android:summary="Enable this workaround if your Camera app does not detect the picture being deleted" android:defaultValue="false"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="About" >
         <Preference

@@ -45,6 +45,7 @@ public class ShareToDeleteActivity extends Activity {
 				finish();
 			}
 		} else {
+			// mostly happens when we just want to refresh the Camera
 			finish();
 		}
 	}

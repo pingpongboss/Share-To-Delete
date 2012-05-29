@@ -8,6 +8,6 @@ public class StartupReciever extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		context.startService(new Intent(context, ContentObserverService.class));
+		context.startService(new Intent(context, ShareToDeleteService.class));
 	}
 }
