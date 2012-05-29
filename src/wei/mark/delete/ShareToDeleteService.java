@@ -126,7 +126,8 @@ public class ShareToDeleteService extends Service {
 								Intent notificationIntent = getDeleteIntent(uri);
 								PendingIntent contentIntent = PendingIntent
 										.getService(
-												ShareToDeleteService.this, 0,
+												ShareToDeleteService.this,
+												0,
 												notificationIntent,
 												// flag updates any existing
 												// notification
@@ -214,6 +215,8 @@ public class ShareToDeleteService extends Service {
 	}
 
 	private void showViews(Uri uri) {
+		hideViews();
+
 		int gravity = Gravity.BOTTOM | Gravity.RIGHT;
 		int x = 8;
 		int y = 8;
@@ -256,9 +259,12 @@ public class ShareToDeleteService extends Service {
 		} catch (Exception ex) {
 			// avoid crashing when we hideViews() from notification
 		}
-		
+
 		// cancel timer
-		mTimer.cancel();
+		if (mTimer != null) {
+			mTimer.cancel();
+			mTimer = null;
+		}
 	}
 
 	private void delete(Uri uri) {
