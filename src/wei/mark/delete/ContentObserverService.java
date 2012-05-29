@@ -1,7 +1,11 @@
 package wei.mark.delete;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import wei.mark.delete.util.Utils;
 import wei.mark.delete.util.Utils.DeleteCallback;
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -35,6 +39,10 @@ public class ContentObserverService extends Service {
 
 	WindowManager mWindowManager;
 	ViewGroup mView;
+
+	ActivityManager mActivityManager;
+	String mCameraApp;
+	Timer mTimer;
 
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -209,6 +217,7 @@ public class ContentObserverService extends Service {
 		int gravity = Gravity.BOTTOM | Gravity.RIGHT;
 		int x = 8;
 		int y = 8;
+		int delay = 1000;
 
 		WindowManager.LayoutParams params = new WindowManager.LayoutParams(
 				WindowManager.LayoutParams.WRAP_CONTENT,
@@ -223,6 +232,22 @@ public class ContentObserverService extends Service {
 		mView.setTag(uri);
 
 		mWindowManager.addView(mView, params);
+
+		// set up timer to detect when user exists Camera app
+		mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+		mCameraApp = mActivityManager.getRunningTasks(1).get(0).topActivity
+				.getClassName();
+		mTimer = new Timer();
+		mTimer.schedule(new TimerTask() {
+
+			@Override
+			public void run() {
+				if (!mCameraApp.equals(mActivityManager.getRunningTasks(1).get(
+						0).topActivity.getClassName())) {
+					hideViews();
+				}
+			}
+		}, delay, delay);
 	}
 
 	private void hideViews() {
@@ -231,6 +256,9 @@ public class ContentObserverService extends Service {
 		} catch (Exception ex) {
 			// avoid crashing when we hideViews() from notification
 		}
+		
+		// cancel timer
+		mTimer.cancel();
 	}
 
 	private void delete(Uri uri) {
