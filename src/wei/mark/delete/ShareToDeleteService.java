@@ -171,14 +171,15 @@ public class ShareToDeleteService extends Service {
 		}
 
 		// save count. Only react to added images
-		PreferenceManager
-				.getDefaultSharedPreferences(ShareToDeleteService.this)
-				.edit()
-				.putInt("count",
-						getContentResolver().query(
-								MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-								null, null, null, "date_added DESC").getCount())
-				.commit();
+		Cursor cursor = getContentResolver().query(
+				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null,
+				"date_added DESC");
+
+		if (cursor != null) {
+			PreferenceManager
+					.getDefaultSharedPreferences(ShareToDeleteService.this)
+					.edit().putInt("count", cursor.getCount()).commit();
+		}
 
 		return START_STICKY;
 	}
