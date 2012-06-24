@@ -13,6 +13,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -175,11 +176,14 @@ public class ShareToDeleteService extends Service {
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null,
 				"date_added DESC");
 
+		Editor edit = PreferenceManager.getDefaultSharedPreferences(
+				ShareToDeleteService.this).edit();
 		if (cursor != null) {
-			PreferenceManager
-					.getDefaultSharedPreferences(ShareToDeleteService.this)
-					.edit().putInt("count", cursor.getCount()).commit();
+			edit.putInt("count", cursor.getCount());
+		} else {
+			edit.putInt("count", Integer.MAX_VALUE);
 		}
+		edit.commit();
 
 		return START_STICKY;
 	}
